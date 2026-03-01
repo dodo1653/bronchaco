@@ -1,11 +1,23 @@
+import { useEffect, useState } from 'react'
+
 const Footer = () => {
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const timer = setTimeout(() => setVisible(true), 500)
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
     <footer className="py-8 border-t relative overflow-hidden" style={{ borderColor: 'rgba(255,255,255,0.05)' }}>
       <div className="absolute inset-0 opacity-10 pointer-events-none">
         <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-amber-900/30 to-transparent" />
       </div>
       <div className="terminal-container relative">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">
+        <div 
+          className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4 transition-all duration-700"
+          style={{ opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(15px)' }}
+        >
           <p className="text-lg font-medium">$KRABS</p>
           <div className="flex items-center gap-4">
             <a href="https://pump.fun/coin/CA" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs transition-colors hover:text-white" style={{ color: 'var(--color-text-muted)' }}>
@@ -22,7 +34,12 @@ const Footer = () => {
             </a>
           </div>
         </div>
-        <p className="text-center text-xs" style={{ color: 'var(--color-text-muted)' }}>Not financial advice. DYOR. Fan-made parody project.</p>
+        <p 
+          className="text-center text-xs transition-all duration-700 delay-200"
+          style={{ color: 'var(--color-text-muted)', opacity: visible ? 1 : 0 }}
+        >
+          Not financial advice. DYOR. Fan-made parody project.
+        </p>
       </div>
     </footer>
   )
