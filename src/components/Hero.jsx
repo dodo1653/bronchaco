@@ -51,7 +51,7 @@ const Hero = () => {
 
         <div className="flex flex-wrap justify-center gap-3 animate-fade-in" style={{ animationDelay: '0.3s' }}>
           <a 
-            href="https://pump.fun/coin/6LTX8gWPBswYTceaJTJ8JMst2CxddrvEq3RktLq2ckmC" 
+            href="https://pump.fun/coin/3bnBAdWpbNvzhFpZuXYGEjWjfLLKwjLbsF2Av7MjuLib" 
             target="_blank" 
             rel="noopener noreferrer" 
             className="group inline-flex items-center gap-2 px-6 py-3 text-xs font-medium transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(251,191,36,0.6)]"
@@ -66,7 +66,7 @@ const Hero = () => {
             <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zm-1-7.5v-5l4.5 2.5-4.5 2.5z"/></svg>
           </a>
           <a 
-            href="https://dexscreener.com/solana/6LTX8gWPBswYTceaJTJ8JMst2CxddrvEq3RktLq2ckmC" 
+            href="https://dexscreener.com/solana/3bnBAdWpbNvzhFpZuXYGEjWjfLLKwjLbsF2Av7MjuLib" 
             target="_blank" 
             rel="noopener noreferrer" 
             className="group inline-flex items-center gap-2 px-5 py-3 border text-xs font-medium transition-all duration-300 hover:bg-white/15 hover:border-white/40 hover:scale-105 hover:shadow-lg"
