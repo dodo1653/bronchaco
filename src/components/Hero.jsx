@@ -4,11 +4,11 @@ import heroBg from '../assets/Gemini_Generated_Image_ovf6v4ovf6v4ovf6.png'
 const Hero = () => {
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <div className="absolute inset-0 flex items-center justify-center">
-        <img src={heroBg} alt="" className="w-full h-full object-cover" />
+      <div className="absolute inset-0">
+        <img src={heroBg} alt="" className="w-full h-full object-contain object-center" />
       </div>
 
-      <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/60 via-[#050505]/30 to-[#050505]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/70 via-[#050505]/40 to-[#050505]" />
 
       <div className="relative z-10 text-center px-6 w-full max-w-2xl pt-20">
         <h1 className="text-6xl sm:text-7xl md:text-8xl font-medium mb-6 tracking-tight">
