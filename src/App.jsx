@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import Lenis from 'lenis'
 import Hero from './components/Hero'
 import LiveSection from './components/LiveSection'
+import Art from './components/Art'
 import Token from './components/Token'
 import About from './components/About'
 import Community from './components/Community'
@@ -35,6 +36,7 @@ function App() {
       <Navbar />
       <Hero />
       <LiveSection />
+      <Art />
       <Token />
       <About />
       <Community />
