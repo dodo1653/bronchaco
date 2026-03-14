@@ -51,15 +51,15 @@ const About = () => {
           className="transition-all duration-700 ease-out mb-10"
           style={{ opacity: visible ? 1 : 0 }}
         >
-          <p className="label">// ABOUT</p>
+          <p className="label" style={{ fontFamily: '"Space Mono", monospace' }}>// ABOUT</p>
         </div>
 
         <div 
           className="transition-all duration-700 ease-out delay-100 mb-10"
           style={{ opacity: visible ? 1 : 0 }}
         >
-          <h2 className="text-2xl md:text-3xl font-semibold mb-4">Built Different</h2>
-          <p className="max-w-lg" style={{ color: 'rgba(255,255,255,0.6)' }}>
+          <h2 className="text-2xl md:text-3xl font-semibold mb-4" style={{ fontFamily: '"Space Mono", monospace' }}>Built Different</h2>
+          <p className="max-w-lg" style={{ color: 'rgba(255,255,255,0.6)', fontFamily: '"Space Mono", monospace' }}>
             $CORTISOL is more than a meme. It's a movement. 
             Dedicated to the culture, the vibe, and the future of meme coins.
           </p>
@@ -83,8 +83,8 @@ const About = () => {
                 borderRadius: '8px',
               }}
             >
-              <h3 className="font-semibold mb-2" style={{ color: '#14b8a6' }}>{point.title}</h3>
-              <p className="text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>{point.desc}</p>
+              <h3 className="font-semibold mb-2" style={{ color: '#14b8a6', fontFamily: '"Space Mono", monospace' }}>{point.title}</h3>
+              <p className="text-sm" style={{ color: 'rgba(255,255,255,0.5)', fontFamily: '"Space Mono", monospace' }}>{point.desc}</p>
             </div>
           ))}
         </div>

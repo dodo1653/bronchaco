@@ -1,5 +1,39 @@
 import { useEffect, useState } from 'react'
 
+const HeroBackground = () => {
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      <div 
+        className="absolute inset-0 animate-pulse-slow"
+        style={{
+          background: 'radial-gradient(ellipse at 30% 50%, rgba(20, 184, 166, 0.15) 0%, transparent 50%)',
+        }}
+      />
+      <div 
+        className="absolute inset-0 animate-pulse-slow"
+        style={{
+          background: 'radial-gradient(ellipse at 70% 30%, rgba(13, 148, 136, 0.1) 0%, transparent 50%)',
+          animationDelay: '2s',
+        }}
+      />
+      <div 
+        className="absolute inset-0 animate-pulse-slow"
+        style={{
+          background: 'radial-gradient(ellipse at 50% 80%, rgba(20, 184, 166, 0.08) 0%, transparent 40%)',
+          animationDelay: '4s',
+        }}
+      />
+      <div 
+        className="absolute inset-0 opacity-30"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+          mixBlendMode: 'overlay',
+        }}
+      />
+    </div>
+  )
+}
+
 const CortisolMeter = () => {
   const [level, setLevel] = useState(15)
   
@@ -53,6 +87,7 @@ const Hero = () => {
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-[#0a0a0a] to-[#0a0a0a]" />
+        <HeroBackground />
         <div className="absolute inset-0" style={{
           backgroundImage: `radial-gradient(circle at 30% 70%, rgba(13, 148, 136, 0.08) 0%, transparent 50%),
                           radial-gradient(circle at 70% 30%, rgba(20, 184, 166, 0.05) 0%, transparent 50%)`
@@ -75,7 +110,20 @@ const Hero = () => {
         ))}
       </div>
 
-      <div className="relative z-10 text-center px-6 w-full max-w-3xl">
+      <div className="relative z-10 text-center px-6 w-full max-w-3xl" style={{ paddingTop: '60px' }}>
+        <h1 
+          className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 transition-all duration-700 ease-out"
+          style={{ 
+            opacity: loaded ? 1 : 0, 
+            color: '#ffffff',
+            fontFamily: '"Space Mono", monospace',
+            letterSpacing: '0.08em',
+            textShadow: '0 0 40px rgba(20, 184, 166, 0.3), 0 0 80px rgba(20, 184, 166, 0.15)',
+          }}
+        >
+          $CORTISOL
+        </h1>
+
         <div 
           className="mb-6 transition-all duration-700 ease-out"
           style={{ opacity: loaded ? 1 : 0 }}
@@ -83,21 +131,11 @@ const Hero = () => {
           <p className="label">ON SOLANA</p>
         </div>
 
-        <h1 
-          className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 transition-all duration-700 ease-out"
-          style={{ 
-            opacity: loaded ? 1 : 0, 
-            color: '#ffffff',
-          }}
-        >
-          $CORTISOL
-        </h1>
-
         <p 
           className="text-lg mb-8 max-w-md mx-auto transition-all duration-700 ease-out"
           style={{ color: 'rgba(255,255,255,0.6)', opacity: loaded ? 1 : 0 }}
         >
-          Stay chill. Don't spike.
+          &nbsp;
         </p>
 
         <div 
