@@ -27,15 +27,27 @@ const CustomChart = () => {
 
           const history = []
           let basePrice = parseFloat(pair.priceUsd) || 0.001
-          for (let i = 0; i < 40; i++) {
-            const variation = (Math.random() - 0.5) * basePrice * 0.2
-            history.push(Math.abs(basePrice + variation))
-            basePrice = basePrice + (Math.random() - 0.5) * basePrice * 0.08
+          for (let i = 0; i < 25; i++) {
+            const volatility = basePrice * 0.15
+            const open = basePrice
+            const close = basePrice + (Math.random() - 0.5) * volatility
+            const high = Math.max(open, close) + Math.random() * volatility * 0.5
+            const low = Math.min(open, close) - Math.random() * volatility * 0.5
+            history.push({ open, close, high, low })
+            basePrice = close
           }
           setPriceData(history)
         }
       } catch (e) {
-        const fallback = Array.from({ length: 40 }, () => 0.0001 + Math.random() * 0.0002)
+        const fallback = Array.from({ length: 25 }, (_, i) => {
+          const base = 0.00015
+          return {
+            open: base + i * 0.00001,
+            close: base + (i + 1) * 0.00001 + (Math.random() - 0.5) * 0.00002,
+            high: base + (i + 1) * 0.00001 + 0.00001,
+            low: base + i * 0.00001 - 0.00001
+          }
+        })
         setPriceData(fallback)
       }
     }
@@ -67,8 +79,8 @@ const CustomChart = () => {
     }
   }
 
-  const maxPrice = Math.max(...priceData, 0.0001)
-  const minPrice = Math.min(...priceData, 0.00001)
+  const maxPrice = Math.max(...priceData.map(c => c.high), 0.0001)
+  const minPrice = Math.min(...priceData.map(c => c.low), 0.00001)
   const priceRange = maxPrice - minPrice || 1
 
   const formatNumber = (num) => {
@@ -125,27 +137,40 @@ const CustomChart = () => {
 
         <div className="flex-1 mb-6" style={{ minHeight: '100px' }}>
           <svg viewBox="0 0 100 50" preserveAspectRatio="none" className="w-full h-full">
-            <defs>
-              <linearGradient id="chartGradFix" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#14b8a6" stopOpacity="0.25"/>
-                <stop offset="100%" stopColor="#14b8a6" stopOpacity="0"/>
-              </linearGradient>
-            </defs>
-            {priceData.length > 1 && (
-              <>
-                <path
-                  d={`M 0 ${50 - ((priceData[0] - minPrice) / priceRange * 50)} ${priceData.map((price, i) => `L ${(i / (priceData.length - 1)) * 100} ${50 - ((price - minPrice) / priceRange * 50)}`).join(' ')} L 100 50 L 0 50 Z`}
-                  fill="url(#chartGradFix)"
-                />
-                <path
-                  d={priceData.map((price, i) => `${i === 0 ? 'M' : 'L'} ${(i / (priceData.length - 1)) * 100} ${50 - ((price - minPrice) / priceRange * 50)}`).join(' ')}
-                  fill="none"
-                  stroke="#14b8a6"
-                  strokeWidth="0.6"
-                  style={{ filter: 'drop-shadow(0 0 6px #14b8a6)' }}
-                />
-              </>
-            )}
+            {priceData.length > 0 && priceData.map((candle, i) => {
+              const x = (i / (priceData.length - 1)) * 100
+              const candleWidth = 100 / priceData.length * 0.6
+              
+              const allHighs = priceData.map(c => c.high)
+              const allLows = priceData.map(c => c.low)
+              const maxP = Math.max(...allHighs)
+              const minP = Math.min(...allLows)
+              const range = maxP - minP || 1
+              
+              const yHigh = 50 - ((candle.high - minP) / range * 50)
+              const yLow = 50 - ((candle.low - minP) / range * 50)
+              const yOpen = 50 - ((candle.open - minP) / range * 50)
+              const yClose = 50 - ((candle.close - minP) / range * 50)
+              
+              const isGreen = candle.close >= candle.open
+              const color = isGreen ? '#10b981' : '#ef4444'
+              
+              return (
+                <g key={i}>
+                  <line 
+                    x1={x} y1={yHigh} x2={x} y2={yLow}
+                    stroke={color} strokeWidth="0.3" opacity="0.6"
+                  />
+                  <rect 
+                    x={x - candleWidth / 2} 
+                    y={Math.min(yOpen, yClose)} 
+                    width={candleWidth} 
+                    height={Math.max(0.5, Math.abs(yClose - yOpen))}
+                    fill={color} opacity="0.9"
+                  />
+                </g>
+              )
+            })}
           </svg>
         </div>
 
@@ -307,7 +332,7 @@ const LiveSection = () => {
 
   return (
     <section ref={sectionRef} id="live" className="py-16" style={{ backgroundColor: 'var(--color-terminal-surface)' }}>
-      <div className="terminal-container">
+      <div className="terminal-container" style={{ paddingTop: '3rem' }}>
         <div 
           className="transition-all duration-700 ease-out mb-10"
           style={{ opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(20px)' }}

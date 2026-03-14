@@ -1,16 +1,23 @@
 import { useEffect } from 'react'
 import Lenis from 'lenis'
 import Hero from './components/Hero'
-import LiveSection from './components/LiveSection'
 import Art from './components/Art'
+import LiveSection from './components/LiveSection'
 import Token from './components/Token'
 import About from './components/About'
 import Community from './components/Community'
 import Footer from './components/Footer'
 import Navbar from './components/Navbar'
+import CinematicTransition from './components/CinematicTransition'
 
 function App() {
   useEffect(() => {
+    const script = document.createElement('script')
+    script.src = 'https://platform.twitter.com/widgets.js'
+    script.async = true
+    script.charset = 'utf-8'
+    document.body.appendChild(script)
+
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -33,10 +40,11 @@ function App() {
 
   return (
     <div className="min-h-screen">
+      <CinematicTransition />
       <Navbar />
       <Hero />
-      <LiveSection />
       <Art />
+      <LiveSection />
       <Token />
       <About />
       <Community />

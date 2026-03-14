@@ -3,7 +3,16 @@ import { useEffect, useRef, useState } from 'react'
 const Art = () => {
   const sectionRef = useRef(null)
   const [visible, setVisible] = useState(false)
-  const [fadeIn, setFadeIn] = useState(false)
+
+  const cardPositions = [
+    { left: '5%', top: '22%', rotate: '-3deg' },
+    { left: '28%', top: '18%', rotate: '2deg' },
+    { left: '51%', top: '22%', rotate: '-1deg' },
+    { left: '74%', top: '18%', rotate: '3deg' },
+    { left: '17%', top: '52%', rotate: '-2deg' },
+    { left: '40%', top: '48%', rotate: '1deg' },
+    { left: '63%', top: '52%', rotate: '-2deg' },
+  ]
 
   const tweets = [
     { id: '2032192656491610471', username: 'PathOfMen_' },
@@ -20,7 +29,6 @@ const Art = () => {
       ([entry]) => {
         if (entry.isIntersecting) {
           setVisible(true)
-          setTimeout(() => setFadeIn(true), 100)
           observer.disconnect()
         }
       },
@@ -32,144 +40,154 @@ const Art = () => {
   }, [])
 
   useEffect(() => {
-    if (visible) {
-      const loadTweets = async () => {
-        if (!window.twttr) {
-          const script = document.createElement('script')
-          script.src = 'https://platform.twitter.com/widgets.js'
-          script.async = true
-          document.body.appendChild(script)
-          await new Promise(resolve => {
-            script.onload = resolve
-          })
-        }
-
-        for (let i = 0; i < tweets.length; i++) {
+    if (visible && window.twttr) {
+      const checkTweetsLoaded = setInterval(() => {
+        let allLoaded = true
+        tweets.forEach((tweet, i) => {
           const container = document.getElementById(`tweet-${i}`)
-          if (container && !container.innerHTML) {
-            try {
-              await window.twttr.widgets.createTweet(
-                tweets[i].id,
-                container,
-                {
-                  theme: 'dark',
-                  width: 280,
-                  align: 'center'
-                }
-              )
-            } catch (e) {
-              console.error('Failed to load tweet', tweets[i].id, e)
+          if (container && container.querySelector('iframe')) {
+            container.style.opacity = '1'
+            const loading = container.parentElement?.querySelector('.tweet-loading')
+            if (loading) {
+              loading.style.opacity = '0'
+              setTimeout(() => loading.style.display = 'none', 600)
             }
+          } else if (!container?.innerHTML) {
+            allLoaded = false
+            window.twttr.widgets.createTweet(tweet.id, container, {
+              theme: 'dark',
+              width: 280,
+              align: 'center'
+            })
           }
-        }
-      }
-      loadTweets()
+        })
+        if (allLoaded) clearInterval(checkTweetsLoaded)
+      }, 500)
+      return () => clearInterval(checkTweetsLoaded)
     }
   }, [visible])
-
-  const getRandomPosition = (index) => {
-    const positions = [
-      { left: '5%', top: '10%', scale: 0.4 },
-      { left: '75%', top: '5%', scale: 0.35 },
-      { left: '15%', top: '60%', scale: 0.3 },
-      { left: '70%', top: '55%', scale: 0.38 },
-      { left: '40%', top: '25%', scale: 0.32 },
-      { left: '25%', top: '80%', scale: 0.28 },
-      { left: '80%', top: '85%', scale: 0.33 },
-    ]
-    return positions[index % positions.length]
-  }
 
   return (
     <section 
       ref={sectionRef} 
       id="art" 
-      className="py-20 relative overflow-hidden min-h-[600px]"
-      style={{ backgroundColor: '#0a0a0a' }}
+      className="py-24 relative overflow-hidden min-h-[1400px]"
+      style={{ backgroundColor: '#050505' }}
     >
-      <div 
-        className="absolute inset-0 opacity-40"
-        style={{
-          background: 'radial-gradient(ellipse at 50% 50%, rgba(20, 184, 166, 0.12) 0%, transparent 60%)',
-        }}
-      />
-
-      <div className="relative z-10 flex items-center justify-center min-h-[600px]">
-        <video 
-          autoPlay 
-          loop 
-          muted 
-          playsInline
-          className="max-w-full max-h-[500px] rounded-xl"
-          style={{
-            boxShadow: '0 0 60px rgba(20, 184, 166, 0.3)',
-          }}
-        >
-          <source src="/bannervid2.mp4" type="video/mp4" />
-        </video>
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 opacity-30" style={{
+          background: 'radial-gradient(ellipse at 30% 20%, rgba(20, 184, 166, 0.15) 0%, transparent 50%)',
+        }} />
+        <div className="absolute inset-0 opacity-20" style={{
+          background: 'radial-gradient(ellipse at 70% 80%, rgba(13, 148, 136, 0.1) 0%, transparent 50%)',
+        }} />
+        <div className="absolute inset-0 opacity-40" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+          mixBlendMode: 'overlay',
+        }} />
       </div>
 
-      <div 
-        className="absolute inset-0 pointer-events-none"
-        style={{ opacity: fadeIn ? 1 : 0, transition: 'opacity 1.5s ease' }}
-      >
-        {tweets.map((tweet, index) => {
-          const pos = getRandomPosition(index)
-          return (
-            <div
-              key={tweet.id}
-              className="absolute transition-all duration-1000"
-              style={{
-                left: pos.left,
-                top: pos.top,
-                transform: `scale(${pos.scale})`,
-                opacity: 0.15,
-                animation: `float${index} ${15 + (index * 2)}s ease-in-out infinite`,
+      <div className="relative z-10 flex flex-col items-center px-4" style={{ paddingTop: '5rem' }}>
+        <div 
+          className="transition-all duration-1000"
+          style={{ 
+            opacity: visible ? 1 : 0, 
+            transform: visible ? 'translateY(0)' : 'translateY(30px)',
+            marginBottom: '2rem'
+          }}
+        >
+          <video 
+            autoPlay 
+            loop 
+            muted 
+            playsInline
+            className="max-w-full max-h-[480px] rounded-2xl"
+            style={{
+              boxShadow: '0 0 100px rgba(20, 184, 166, 0.4), 0 0 200px rgba(20, 184, 166, 0.15)',
+            }}
+          >
+            <source src="/bannervid2.mp4" type="video/mp4" />
+          </video>
+          <div style={{ height: '1.5rem' }} />
+        </div>
+
+        <div 
+          className="relative"
+          style={{ height: '650px', width: '100%', maxWidth: '1100px' }}
+        >
+          <div 
+            className="absolute inset-0 flex items-start justify-center pt-12"
+            style={{
+              opacity: visible ? 1 : 0,
+              transition: 'opacity 1.5s ease',
+              transitionDelay: '0.3s'
+            }}
+          >
+            <p 
+              className="text-sm tracking-[0.3em] uppercase"
+              style={{ 
+                color: 'rgba(20, 184, 166, 0.6)',
+                fontFamily: 'Space Mono, monospace',
               }}
             >
-              <div 
-                className="rounded-xl overflow-hidden"
-                style={{ 
-                  background: 'rgba(0, 0, 0, 0.6)',
-                  border: '1px solid rgba(20, 184, 166, 0.2)',
-                  width: '280px',
+              Viral everywhere
+            </p>
+          </div>
+
+          {tweets.map((tweet, index) => {
+            const pos = cardPositions[index]
+            return (
+              <div
+                key={tweet.id}
+                className="absolute transition-all duration-1000"
+                style={{
+                  left: pos.left,
+                  top: pos.top,
+                  transform: `rotate(${pos.rotate})`,
+                  opacity: visible ? 1 : 0,
+                  transitionDelay: `${0.1 + index * 0.1}s`,
+                  zIndex: index,
                 }}
               >
-                <div id={`tweet-${index}`} />
+                <div 
+                  className="rounded-2xl overflow-hidden relative"
+                  style={{ 
+                    background: 'rgba(10, 10, 10, 0.85)',
+                    border: '1px solid rgba(20, 184, 166, 0.15)',
+                    width: '280px',
+                    minHeight: '150px',
+                    boxShadow: '0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(20,184,166,0.1)',
+                  }}
+                >
+                  <div 
+                    className="tweet-loading absolute inset-0 flex items-center justify-center"
+                    style={{
+                      background: 'rgba(10, 10, 10, 0.9)',
+                      transition: 'opacity 0.6s ease',
+                    }}
+                  >
+                    <div className="flex flex-col items-center">
+                      <div className="w-8 h-8 rounded-full border-2 border-teal-500/30 border-t-teal-500 animate-spin mb-2" />
+                    </div>
+                  </div>
+                  <div 
+                    id={`tweet-${index}`}
+                    className="tweet-container"
+                    style={{ opacity: 0, transition: 'opacity 0.4s ease' }}
+                  />
+                </div>
               </div>
-            </div>
-          )
-        })}
+            )
+          })}
+        </div>
       </div>
 
       <style>{`
-        @keyframes float0 {
-          0%, 100% { transform: scale(0.4) translateY(0px); }
-          50% { transform: scale(0.4) translateY(-20px); }
+        .tweet-container iframe {
+          pointer-events: none !important;
         }
-        @keyframes float1 {
-          0%, 100% { transform: scale(0.35) translateY(0px); }
-          50% { transform: scale(0.35) translateY(15px); }
-        }
-        @keyframes float2 {
-          0%, 100% { transform: scale(0.3) translateY(0px); }
-          50% { transform: scale(0.3) translateY(-25px); }
-        }
-        @keyframes float3 {
-          0%, 100% { transform: scale(0.38) translateY(0px); }
-          50% { transform: scale(0.38) translateY(18px); }
-        }
-        @keyframes float4 {
-          0%, 100% { transform: scale(0.32) translateY(0px); }
-          50% { transform: scale(0.32) translateY(-15px); }
-        }
-        @keyframes float5 {
-          0%, 100% { transform: scale(0.28) translateY(0px); }
-          50% { transform: scale(0.28) translateY(22px); }
-        }
-        @keyframes float6 {
-          0%, 100% { transform: scale(0.33) translateY(0px); }
-          50% { transform: scale(0.33) translateY(-18px); }
+        .tweet-container {
+          overflow: hidden;
         }
       `}</style>
     </section>
