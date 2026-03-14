@@ -139,22 +139,21 @@ const Navbar = () => {
                 key={link.href}
                 href={link.href}
                 onClick={(e) => handleClick(e, link.href)}
-                className="relative px-3.5 py-1.5 text-xs transition-all duration-500 rounded-lg"
+                className="relative px-4 py-1.5 text-xs rounded-lg overflow-hidden"
                 style={{ 
                   color: activeSection === link.href.slice(1) ? '#ffffff' : 'rgba(255,255,255,0.4)',
                   fontFamily: '"Space Mono", monospace',
                 }}
               >
+                <span 
+                  className="absolute inset-0 rounded-lg transition-all duration-700 ease-out"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(20, 184, 166, 0.12) 0%, rgba(20, 184, 166, 0.03) 100%)',
+                    opacity: activeSection === link.href.slice(1) ? 1 : 0,
+                    boxShadow: activeSection === link.href.slice(1) ? '0 0 25px rgba(20, 184, 166, 0.15)' : 'none',
+                  }}
+                />
                 <span className="relative z-10">{link.label}</span>
-                {activeSection === link.href.slice(1) && (
-                  <span 
-                    className="absolute inset-0 rounded-lg"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(20, 184, 166, 0.15) 0%, rgba(20, 184, 166, 0.05) 100%)',
-                      boxShadow: '0 0 20px rgba(20, 184, 166, 0.2), inset 0 0 15px rgba(20, 184, 166, 0.1)',
-                    }}
-                  />
-                )}
               </a>
             ))}
           </div>
