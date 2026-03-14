@@ -67,18 +67,17 @@ const Navbar = () => {
       const targetPosition = element.getBoundingClientRect().top + window.pageYOffset
       const startPosition = window.pageYOffset
       const distance = targetPosition - startPosition
-      const duration = 2000
+      const duration = 1800
       let start = null
 
       const step = (timestamp) => {
         if (!start) start = timestamp
         const progress = timestamp - start
         const progressRatio = Math.min(progress / duration, 1)
-        const easeInOut = progressRatio < 0.5
-          ? 2 * progressRatio * progressRatio
-          : 1 - Math.pow(-2 * progressRatio + 2, 2) / 2
+        const bounce = Math.sin(progressRatio * Math.PI * 2) * (1 - progressRatio) * 0.15
+        const easeOut = 1 - Math.pow(1 - progressRatio, 3)
         
-        window.scrollTo(0, startPosition + distance * easeInOut)
+        window.scrollTo(0, startPosition + distance * easeOut + distance * bounce)
         
         if (progress < duration) {
           window.requestAnimationFrame(step)
@@ -140,16 +139,22 @@ const Navbar = () => {
                 key={link.href}
                 href={link.href}
                 onClick={(e) => handleClick(e, link.href)}
-                className="px-3.5 py-1.5 text-xs transition-all duration-300 rounded-lg"
+                className="relative px-3.5 py-1.5 text-xs transition-all duration-500 rounded-lg"
                 style={{ 
-                  color: activeSection === link.href.slice(1) ? '#14b8a6' : 'rgba(255,255,255,0.4)',
+                  color: activeSection === link.href.slice(1) ? '#ffffff' : 'rgba(255,255,255,0.4)',
                   fontFamily: '"Space Mono", monospace',
-                  background: activeSection === link.href.slice(1) 
-                    ? 'rgba(20, 184, 166, 0.08)' 
-                    : 'transparent',
                 }}
               >
-                {link.label}
+                <span className="relative z-10">{link.label}</span>
+                {activeSection === link.href.slice(1) && (
+                  <span 
+                    className="absolute inset-0 rounded-lg"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(20, 184, 166, 0.15) 0%, rgba(20, 184, 166, 0.05) 100%)',
+                      boxShadow: '0 0 20px rgba(20, 184, 166, 0.2), inset 0 0 15px rgba(20, 184, 166, 0.1)',
+                    }}
+                  />
+                )}
               </a>
             ))}
           </div>
