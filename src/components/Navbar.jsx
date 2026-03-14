@@ -64,7 +64,27 @@ const Navbar = () => {
     e.preventDefault()
     const element = document.querySelector(href)
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
+      const targetPosition = element.getBoundingClientRect().top + window.pageYOffset
+      const startPosition = window.pageYOffset
+      const distance = targetPosition - startPosition
+      const duration = 2000
+      let start = null
+
+      const step = (timestamp) => {
+        if (!start) start = timestamp
+        const progress = timestamp - start
+        const progressRatio = Math.min(progress / duration, 1)
+        const easeInOut = progressRatio < 0.5
+          ? 2 * progressRatio * progressRatio
+          : 1 - Math.pow(-2 * progressRatio + 2, 2) / 2
+        
+        window.scrollTo(0, startPosition + distance * easeInOut)
+        
+        if (progress < duration) {
+          window.requestAnimationFrame(step)
+        }
+      }
+      window.requestAnimationFrame(step)
     }
     setMenuOpen(false)
   }
