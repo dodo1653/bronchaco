@@ -50,13 +50,13 @@ const Token = () => {
             className="transition-all duration-700 ease-out delay-200"
             style={{ opacity: visible ? 1 : 0 }}
           >
-            <div className="p-5 border mb-6" style={{ borderColor: 'rgba(13, 148, 136, 0.2)', backgroundColor: 'rgba(13, 148, 136, 0.05)' }}>
+            <div className="p-4 md:p-5 border mb-6 overflow-hidden" style={{ borderColor: 'rgba(13, 148, 136, 0.2)', backgroundColor: 'rgba(13, 148, 136, 0.05)' }}>
               <p className="label mb-2">Contract Address</p>
-              <div className="flex items-center gap-3">
-                <p className="text-sm font-mono" style={{ color: 'rgba(255,255,255,0.7)' }}>{CA}</p>
+              <div className="flex items-center justify-between gap-2 md:gap-3">
+                <p className="text-xs md:text-sm font-mono break-all" style={{ color: 'rgba(255,255,255,0.7)' }}>{CA}</p>
                 <button 
                   onClick={copyCA}
-                  className="text-xs px-2 py-1 transition-colors"
+                  className="text-xs px-2 py-1 transition-colors whitespace-nowrap"
                   style={{ border: '1px solid rgba(13, 148, 136, 0.3)', borderRadius: '2px', color: '#14b8a6' }}
                 >
                   {copied ? 'COPIED' : 'COPY'}

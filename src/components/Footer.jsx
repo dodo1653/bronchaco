@@ -1,7 +1,17 @@
 const Footer = () => {
   return (
-    <footer className="py-8 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-      <div className="terminal-container">
+    <footer 
+      className="py-8 border-t relative overflow-hidden"
+      style={{ 
+        borderColor: 'rgba(255,255,255,0.08)',
+        background: 'linear-gradient(to bottom, rgba(8,8,10,0.85), rgba(8,8,10,1)), url(/banner.png) center/cover no-repeat',
+      }}
+    >
+      <div className="absolute inset-0 pointer-events-none" style={{ 
+        background: 'linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(8,8,10,0.9) 60%)',
+      }} />
+      
+      <div className="terminal-container relative z-10">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div>
             <p className="font-semibold">$CORTISOL</p>
