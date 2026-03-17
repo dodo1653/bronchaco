@@ -43,12 +43,12 @@ function App() {
 
   const playAudio = () => {
     if (!audioRef.current) return
-    audioRef.current.volume = 0
+    audioRef.current.volume = 0.3
     audioRef.current.play().then(() => {
       setIsPlaying(true)
-      let vol = 0
+      let vol = 0.3
       const fadeIn = () => {
-        vol += 0.015
+        vol += 0.04
         if (audioRef.current && vol < 0.5) {
           audioRef.current.volume = vol
           requestAnimationFrame(fadeIn)
@@ -63,7 +63,7 @@ function App() {
     setIsPlaying(false)
     let vol = audioRef.current.volume
     const fadeOut = () => {
-      vol -= 0.015
+      vol -= 0.06
       if (audioRef.current && vol > 0) {
         audioRef.current.volume = vol
         requestAnimationFrame(fadeOut)
