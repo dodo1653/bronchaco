@@ -18,6 +18,14 @@ const Studio = () => {
     text: 'CORTISOL'
   })
   const [isDraggingWatermark, setIsDraggingWatermark] = useState(false)
+  const [selectedAsset, setSelectedAsset] = useState(null)
+
+  const assets = [
+    { id: 'none', name: 'None', icon: '○' },
+    { id: 'gauge', name: 'Gauge', icon: '◠' },
+    { id: 'frame', name: 'Frame', icon: '□' },
+    { id: 'corner', name: 'Corner', icon: 'L' },
+  ]
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0]
@@ -51,7 +59,7 @@ const Studio = () => {
     if (image && canvasRef.current) {
       drawCanvas()
     }
-  }, [image, watermark])
+  }, [image, watermark, selectedAsset])
 
   const drawCanvas = () => {
     const canvas = canvasRef.current
@@ -95,16 +103,58 @@ const Studio = () => {
     ctx.save()
     ctx.globalAlpha = watermark.opacity
     
-    ctx.font = `bold ${size * 0.25}px "Space Mono", monospace`
-    ctx.textAlign = 'center'
-    ctx.textBaseline = 'middle'
-    
-    ctx.strokeStyle = '#000'
-    ctx.lineWidth = size * 0.06
-    ctx.strokeText(watermark.text, x, y)
-    
-    ctx.fillStyle = '#14b8a6'
-    ctx.fillText(watermark.text, x, y)
+    if (selectedAsset === 'none' || !selectedAsset) {
+      ctx.font = `bold ${size * 0.25}px "Space Mono", monospace`
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      ctx.strokeStyle = '#000'
+      ctx.lineWidth = size * 0.06
+      ctx.strokeText(watermark.text, x, y)
+      ctx.fillStyle = '#14b8a6'
+      ctx.fillText(watermark.text, x, y)
+    } else if (selectedAsset === 'gauge') {
+      ctx.beginPath()
+      ctx.arc(x, y, size / 2, Math.PI, 0)
+      ctx.strokeStyle = '#14b8a6'
+      ctx.lineWidth = 6
+      ctx.stroke()
+      ctx.rotate(-Math.PI / 4)
+      ctx.beginPath()
+      ctx.moveTo(x, y)
+      ctx.lineTo(x, y - size / 2 + 8)
+      ctx.strokeStyle = '#fff'
+      ctx.lineWidth = 2
+      ctx.stroke()
+      ctx.rotate(Math.PI / 4)
+      ctx.font = `bold ${size * 0.15}px "Space Mono"`
+      ctx.textAlign = 'center'
+      ctx.fillStyle = '#14b8a6'
+      ctx.fillText(watermark.text, x, y + size * 0.35)
+    } else if (selectedAsset === 'frame') {
+      const frameSize = size * 0.8
+      ctx.strokeStyle = '#14b8a6'
+      ctx.lineWidth = 3
+      ctx.strokeRect(x - frameSize/2, y - frameSize/2, frameSize, frameSize)
+      ctx.font = `bold ${size * 0.18}px "Space Mono"`
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      ctx.fillStyle = '#14b8a6'
+      ctx.fillText(watermark.text, x, y)
+    } else if (selectedAsset === 'corner') {
+      const cornerSize = size * 0.6
+      ctx.strokeStyle = '#14b8a6'
+      ctx.lineWidth = 3
+      ctx.beginPath()
+      ctx.moveTo(x, y + cornerSize)
+      ctx.lineTo(x, y)
+      ctx.lineTo(x + cornerSize, y)
+      ctx.stroke()
+      ctx.font = `bold ${size * 0.2}px "Space Mono"`
+      ctx.textAlign = 'left'
+      ctx.textBaseline = 'bottom'
+      ctx.fillStyle = '#14b8a6'
+      ctx.fillText(watermark.text, x + cornerSize + 8, y + cornerSize/2)
+    }
     
     ctx.restore()
   }
@@ -177,6 +227,26 @@ const Studio = () => {
             <h2 className="text-xs font-bold tracking-[0.3em] uppercase text-white/40 mb-6">Customize</h2>
             
             <div className="space-y-6">
+              <div className="space-y-3">
+                <label className="text-[10px] uppercase tracking-widest text-white/40 block">Assets</label>
+                <div className="grid grid-cols-4 gap-2">
+                  {assets.map(asset => (
+                    <button
+                      key={asset.id}
+                      onClick={() => setSelectedAsset(asset.id)}
+                      className={`aspect-square rounded-xl flex flex-col items-center justify-center gap-1 transition-all ${
+                        selectedAsset === asset.id
+                          ? 'bg-teal-500/20 border border-teal-500/50 text-teal-500'
+                          : 'bg-white/5 border border-white/10 text-white/40 hover:bg-white/10 hover:text-white/60'
+                      }`}
+                    >
+                      <span className="text-sm">{asset.icon}</span>
+                      <span className="text-[7px] uppercase tracking-wider">{asset.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <div className="space-y-3">
                 <label className="text-[10px] uppercase tracking-widest text-white/40 block">Watermark Text</label>
                 <input 
