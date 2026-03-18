@@ -28,7 +28,7 @@ const Studio = () => {
     { id: 'img4', name: 'Banner', icon: '4', preview: '/cortisol_banner_under_5mb.jpg' },
   ]
 
-  const assetImages = {}
+  const assetImagesRef = useRef({})
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0]
@@ -67,11 +67,11 @@ const Studio = () => {
   useEffect(() => {
     const preloadImages = () => {
       assets.forEach(asset => {
-        if (asset.preview && !assetImages[asset.id]) {
+        if (asset.preview && !assetImagesRef.current[asset.id]) {
           const img = new Image()
           img.crossOrigin = 'anonymous'
           img.src = asset.preview
-          assetImages[asset.id] = img
+          assetImagesRef.current[asset.id] = img
         }
       })
     }
@@ -129,10 +129,12 @@ const Studio = () => {
       ctx.strokeText(watermark.text, x, y)
       ctx.fillStyle = '#14b8a6'
       ctx.fillText(watermark.text, x, y)
-    } else if (assetImages[selectedAsset]) {
-      const img = assetImages[selectedAsset]
-      const imgSize = size * 1.5
-      ctx.drawImage(img, x - imgSize/2, y - imgSize/2, imgSize, imgSize)
+    } else if (assetImagesRef.current[selectedAsset]) {
+      const img = assetImagesRef.current[selectedAsset]
+      if (img.complete) {
+        const imgSize = size * 1.5
+        ctx.drawImage(img, x - imgSize/2, y - imgSize/2, imgSize, imgSize)
+      }
     }
     
     ctx.restore()
