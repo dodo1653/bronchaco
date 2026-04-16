@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { useLocation, Link } from 'react-router-dom'
-import Studio from './components/Studio'
 
 function App() {
   const [isLoaded, setIsLoaded] = useState(false)
@@ -23,6 +22,92 @@ function App() {
     { name: 'X', url: 'https://x.com/bronchaco' },
     { name: 'Telegram', url: 'https://t.me/bronchaco' },
   ]
+
+  const BronchacoStudio = () => {
+    const [image, setImage] = useState(null)
+    const [text, setText] = useState("Somebody has done it before,\nsomebody will do it again")
+    const [textSize, setTextSize] = useState(24)
+    const [textPos, setTextPos] = useState(50)
+    const canvasRef = useRef(null)
+
+    const handleImageUpload = (e) => {
+      const file = e.target.files[0]
+      if (file) {
+        const reader = new FileReader()
+        reader.onload = (ev) => setImage(ev.target.result)
+        reader.readAsDataURL(file)
+      }
+    }
+
+    const downloadMeme = () => {
+      const canvas = canvasRef.current
+      if (!canvas) return
+      const link = document.createElement('a')
+      link.download = 'bronchaco-meme.png'
+      link.href = canvas.toDataURL()
+      link.click()
+    }
+
+    return (
+      <div className="min-h-screen bg-black text-white font-['Inter']">
+        <nav className="fixed top-0 left-0 right-0 z-50 py-6 px-8 flex items-center justify-between">
+          <a href="/" className="text-sm font-mono tracking-widest text-white/60">$BRONCHACO</a>
+          <a href="/" className="text-xs text-white/30 hover:text-white/50 font-mono">← Back</a>
+        </nav>
+
+        <div className="pt-24 px-8 pb-12 max-w-2xl mx-auto">
+          <h1 className="text-2xl font-light text-white/80 mb-2">Bronchaco Studio</h1>
+          <p className="text-sm text-white/40 mb-8">Create your own Brochacho meme</p>
+
+          <div className="space-y-6">
+            <div>
+              <label className="block text-xs text-white/40 font-mono mb-2">UPLOAD IMAGE</label>
+              <input type="file" accept="image/*" onChange={handleImageUpload} className="w-full text-sm text-white/50 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-mono file:bg-white/10 file:text-white/70 file:cursor-pointer file:transition-colors file:hover:bg-white/20" />
+            </div>
+
+            {image && (
+              <div className="relative">
+                <canvas ref={canvasRef} width={800} height={800} className="w-full hidden" />
+                <div className="relative rounded-lg overflow-hidden border border-white/10">
+                  <img src={image} alt="Preview" className="w-full" />
+                  <div 
+                    className="absolute left-0 right-0 text-center text-white font-['Space_Mono'] font-bold px-4"
+                    style={{ 
+                      fontSize: `${textSize}px`, 
+                      top: `${textPos}%`,
+                      textShadow: '2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 4px rgba(0,0,0,0.8)'
+                    }}
+                  >
+                    <pre className="whitespace-pre-wrap">{text}</pre>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div>
+              <label className="block text-xs text-white/40 font-mono mb-2">TEXT</label>
+              <textarea value={text} onChange={(e) => setText(e.target.value)} rows={3} className="w-full bg-black border border-white/10 rounded-lg px-4 py-3 text-sm text-white/70 font-mono focus:outline-none focus:border-white/30" />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs text-white/40 font-mono mb-2">SIZE: {textSize}px</label>
+                <input type="range" min="12" max="48" value={textSize} onChange={(e) => setTextSize(Number(e.target.value))} className="w-full accent-white" />
+              </div>
+              <div>
+                <label className="block text-xs text-white/40 font-mono mb-2">POSITION: {textPos}%</label>
+                <input type="range" min="10" max="90" value={textPos} onChange={(e) => setTextPos(Number(e.target.value))} className="w-full accent-white" />
+              </div>
+            </div>
+
+            <button onClick={downloadMeme} disabled={!image} className="w-full py-3 rounded-lg bg-white text-black font-mono text-sm hover:bg-white/90 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+              Download Meme
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-black text-white font-['Inter']">
@@ -146,7 +231,7 @@ function App() {
         </>
       )}
 
-      {location.pathname === '/studio' && <Studio />}
+      {location.pathname === '/studio' && <BronchacoStudio />}
     </div>
   )
 }
