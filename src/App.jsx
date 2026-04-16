@@ -19,11 +19,11 @@ function App() {
   ]
 
   const socialLinks = [
-    { name: 'X', url: 'https://x.com/shitcoiner' },
-    { name: 'Telegram', url: 'https://t.me/shitcoiner' },
+    { name: 'X', url: 'https://x.com/shitcoineronSOL' },
+    { name: 'Telegram', url: 'https://t.me/shitcoineronSOL' },
   ]
 
-  const BronchacoStudio = () => {
+  const ShitcoinerStudio = () => {
     const [image, setImage] = useState(null)
     const [text, setText] = useState("Somebody has done it before,\nsomebody will do it again")
     const [textSize, setTextSize] = useState(24)
@@ -60,7 +60,7 @@ function App() {
         </nav>
 
         <div className="pt-24 px-8 pb-12 max-w-2xl mx-auto">
-          <h1 className="text-2xl font-light text-white/80 mb-2">Bronchaco Studio</h1>
+          <h1 className="text-2xl font-light text-white/80 mb-2">$SHITCOINER Studio</h1>
           <p className="text-sm text-white/40 mb-8">Create your own Brochacho meme</p>
 
           <div className="space-y-6">
@@ -138,7 +138,7 @@ function App() {
           transition={{ duration: 1.5, repeat: Infinity }}
           className="text-sm font-mono tracking-widest"
         >
-          SOMEBOBY WILL DO IT AGAIN
+          ALL-OUT WAR
         </motion.div>
       </motion.div>
 
@@ -171,8 +171,8 @@ function App() {
           </div>
           <div className="relative z-10 max-w-2xl mx-auto text-center">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mb-8">
-              <h1 className="text-3xl md:text-4xl font-light leading-relaxed text-white/80 font-['Inter']">
-                "Somebody has done it before,<br/>somebody will do it again"
+              <h1 className="text-2xl md:text-3xl font-light leading-relaxed text-white/80 font-['Inter']">
+                "I am declaring an ALL-OUT WAR<br/>against the shitcoiner crypto bros."
               </h1>
             </motion.div>
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="flex justify-center mb-12">
@@ -222,12 +222,27 @@ function App() {
         <section className="py-24 px-8">
           <div className="max-w-3xl mx-auto text-center">
             <p className="text-xs text-white/30 font-mono tracking-widest mb-8">STUDIO</p>
-            <p className="text-white/50 mb-8 font-mono text-sm">Create your own Brochacho meme. Upload an image and add the iconic text.</p>
+            <p className="text-white/50 mb-8 font-mono text-sm">Create your own anti-shitcoin propaganda. Expose the degenerate court jesters.</p>
             <a href="/studio" className="inline-block px-8 py-3 rounded-lg border border-white/20 text-white/70 hover:text-white hover:border-white/40 transition-colors font-mono text-sm">Open Studio →</a>
           </div>
         </section>
 
         <section className="py-24 px-8" style={{ background: 'rgba(255,255,255,0.02)' }}>
+          <div className="max-w-3xl mx-auto text-center">
+            <p className="text-xs text-white/30 font-mono tracking-widest mb-8">THE MANIFESTO</p>
+            <div className="text-left space-y-4 text-sm text-white/50 font-mono">
+              <p>• Shitcoiners are the degenerate court jesters of capital markets</p>
+              <p>• They stand in front of digital scarcity and say, "Very impressive, but what if we added a dog?"</p>
+              <p>• Bitcoin solved the monetary problem with brutal elegance</p>
+              <p>• Their response was to open a digital flea market full of vapor, lies, unlock schedules, and inflationary sludge</p>
+              <p>• They inherit the language of freedom while rebuilding the exact disease Bitcoin was designed to escape</p>
+              <p>• Trusted insiders. Premines. Foundations. Treasury unlocks. "Community."</p>
+              <p>• The shitcoin sewer has anime branding and a whitepaper written by a sociopath in a blazer</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-24 px-8">
           <div className="max-w-3xl mx-auto text-center">
             <p className="text-xs text-white/30 font-mono tracking-widest mb-8">OFFICIAL LINKS</p>
             <div className="flex justify-center gap-8">
@@ -240,13 +255,13 @@ function App() {
 
         <footer className="py-12 px-8 border-t border-white/5">
           <div className="max-w-3xl mx-auto text-center">
-            <p className="text-xs text-white/20 font-mono">Not financial advice. Just vibes.</p>
+            <p className="text-xs text-white/20 font-mono">A shame to Bitcoin. Lunatics must be addressed accordingly.</p>
           </div>
         </footer>
         </>
       )}
 
-      {location.pathname === '/studio' && <BronchacoStudio />}
+      {location.pathname === '/studio' && <ShitcoinerStudio />}
     </div>
   )
 }
